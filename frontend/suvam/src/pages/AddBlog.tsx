@@ -1,18 +1,24 @@
 import { useRef, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const AddBlog = () => {
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
-  const [image, setImage] = useState(null);
+  const location = useLocation();
+  const { blog: blogState } = location.state || {};
+  const { edit } = location.state || false;
+  const [title, setTitle] = useState(blogState?.title || "");
+  const [content, setContent] = useState(blogState?.content || "");
+  const [image, setImage] = useState(blogState?.image || null);
+
   const [loading, setLoading] = useState(false);
 
+  const navigate = useNavigate();
   const ref: any = useRef(null);
 
   const handleTitleChange = (e: any) => setTitle(e.target.value);
   const handleContentChange = (e: any) => setContent(e.target.value);
   const handleImageChange = (e: any) => setImage(e.target.files[0]);
 
-  const handleSubmit = async (e: any) => {
+  const handleCreate = async (e: any) => {
     e.preventDefault();
     setLoading(true);
     const formData = new FormData();
@@ -38,7 +44,6 @@ const AddBlog = () => {
         setContent("");
         setImage(null);
         if (ref.current) ref.current.value = "";
-        alert("Failed to create data.");
       }
     } catch (error) {
       console.error("Error creating data:", error);
@@ -46,11 +51,48 @@ const AddBlog = () => {
     setLoading(false);
   };
 
+  const handleEdit = async (e: any) => {
+    e.preventDefault();
+    setLoading(true);
+    const formData = new FormData();
+    formData.append("title", title);
+    formData.append("content", content);
+    if (typeof image === "string") {
+      formData.append("existimage", image);
+    } else if (image) {
+      formData.append("image", image);
+    }
+    console.log(formData.get("content"));
+
+    try {
+      const response = await fetch(
+        `https://suvam-svwu.vercel.app/api/blogs/${blogState._id}`,
+        {
+          method: "PUT",
+          body: formData,
+        }
+      );
+
+      if (response.ok) {
+        alert("Data created successfully!");
+        setTitle("");
+        setContent("");
+        setImage(null);
+        if (ref.current) ref.current.value = "";
+        navigate("/");
+      }
+    } catch (error) {
+      console.error("Error creating data:", error);
+    }
+    setLoading(false);
+  };
 
   return (
     <div className="max-w-lg mx-auto p-6 bg-white shadow-lg rounded-lg mt-2">
-      <h2 className="text-2xl font-semibold mb-6">Create New Entry</h2>
-      <form onSubmit={handleSubmit}>
+      <h2 className="text-2xl font-semibold mb-6">
+        {edit ? "Edit Entry" : "Create New Entry"}
+      </h2>
+      <form onSubmit={edit ? handleEdit : handleCreate}>
         {/* Title Field */}
         <div className="mb-4">
           <label className="block text-sm font-medium text-gray-700">
@@ -99,7 +141,7 @@ const AddBlog = () => {
             className="w-full bg-blue-500 text-white py-3 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
             disabled={loading}
           >
-            Submit
+            {edit ? "Update" : "Submit"}
           </button>
         </div>
       </form>

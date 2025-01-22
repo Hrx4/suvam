@@ -22,7 +22,7 @@ const Home: React.FC = () => {
     <>
       <div className=" w-full flex-1 pb-4 mt-2 overflow-y-auto ">
 
-        {blogs && blogs.map((blog) => (
+        {blogs && blogs.slice().reverse().map((blog) => (
           <BlogItem key={blog._id} blog={blog} />
         ))}
       </div>
