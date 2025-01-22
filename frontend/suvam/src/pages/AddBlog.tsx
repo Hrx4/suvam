@@ -6,13 +6,13 @@ const AddBlog = () => {
   const [image, setImage] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  const ref :any = useRef(null);
+  const ref: any = useRef(null);
 
-  const handleTitleChange = (e:any) => setTitle(e.target.value);
-  const handleContentChange = (e:any) => setContent(e.target.value);
-  const handleImageChange = (e:any) => setImage(e.target.files[0]);
+  const handleTitleChange = (e: any) => setTitle(e.target.value);
+  const handleContentChange = (e: any) => setContent(e.target.value);
+  const handleImageChange = (e: any) => setImage(e.target.files[0]);
 
-  const handleSubmit = async (e:any) => {
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
     setLoading(true);
     const formData = new FormData();
@@ -24,17 +24,20 @@ const AddBlog = () => {
     console.log(formData.get("content"));
 
     try {
-      const response = await fetch("http://localhost:5000/api/createData", {
-        method: "POST",
-        body: formData,
-      });
+      const response = await fetch(
+        "https://suvam-svwu.vercel.app/api/createData",
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
 
       if (response.ok) {
         alert("Data created successfully!");
         setTitle("");
         setContent("");
         setImage(null);
-        if(ref.current) ref.current.value = "";
+        if (ref.current) ref.current.value = "";
         alert("Failed to create data.");
       }
     } catch (error) {
@@ -42,6 +45,7 @@ const AddBlog = () => {
     }
     setLoading(false);
   };
+
 
   return (
     <div className="max-w-lg mx-auto p-6 bg-white shadow-lg rounded-lg mt-2">
@@ -93,7 +97,7 @@ const AddBlog = () => {
           <button
             type="submit"
             className="w-full bg-blue-500 text-white py-3 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          disabled={loading}
+            disabled={loading}
           >
             Submit
           </button>

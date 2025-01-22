@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API = axios.create({ baseURL: 'http://localhost:5000/api' });
+const API = axios.create({ baseURL: 'https://suvam-svwu.vercel.app/api' });
 
 export const fetchBlogs = () => API.get('/blogs');
 export const fetchBlog = (id: string) => API.get(`/blogs/${id}`);
