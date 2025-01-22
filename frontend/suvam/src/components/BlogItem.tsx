@@ -6,9 +6,9 @@ interface BlogItemProps {
 // to={`/blogs/${blog._id}`}
 
 const BlogItem: React.FC<BlogItemProps> = ({ blog }) => (
-  <div className=" w-1/2  p-2 min-h-36 mt-2 ml-auto mr-auto shadow-customMedium  rounded-md cursor-pointer">
+  <div className=" lg:w-1/2 md:w-2/3 w-11/12 p-2 min-h-36 mt-2 ml-auto mr-auto shadow-customMedium  rounded-md cursor-pointer">
     <Link to={`/blogs/${blog._id}`}>
-      <span className=" text-xl font-semibold ">{blog.title}</span>
+      <span className=" text-xl font-extrabold">{blog.title}</span>
       <div className=" flex gap-2 ">
         <p className="  line-clamp-4">{blog.content}</p>
         {blog.image && (

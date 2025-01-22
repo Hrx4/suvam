@@ -17,9 +17,9 @@ const BlogDetails: React.FC = () => {
   if (!blog) return <p>Loading...</p>;
 
   return (
-    <div className="max-h-[620px] w-full text-center whitespace-pre-wrap overflow-y-scroll p-2">
+    <div className="flex-1 w-full text-center whitespace-pre-wrap overflow-y-scroll p-2">
       <h1 className=" text-2xl font-bold">{blog.title}</h1>
-      <div className=" h-full w-full">
+      <div className=" h-full w-full md:w-11/12">
         {
           blog.image &&
           <img

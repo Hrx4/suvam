@@ -20,7 +20,7 @@ const Home: React.FC = () => {
 
   return (
     <>
-      <div className=" w-full max-h-[620px] mt-2 overflow-y-scroll ">
+      <div className=" w-full flex-1 pb-4 mt-2 overflow-y-auto ">
 
         {blogs && blogs.map((blog) => (
           <BlogItem key={blog._id} blog={blog} />

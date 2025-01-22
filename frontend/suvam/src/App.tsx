@@ -8,7 +8,7 @@ import AddBlog from "./pages/AddBlog";
 const App: React.FC = () => {
   return (
     <>
-      <div className=" h-dvh w-full over">
+      <div className=" h-dvh w-full flex flex-col">
       <Navbar />
       <Router>
         <Routes>
