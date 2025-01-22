@@ -6,13 +6,13 @@ const AddBlog = () => {
   const [image, setImage] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  const ref = useRef(null);
+  const ref :any = useRef(null);
 
-  const handleTitleChange = (e) => setTitle(e.target.value);
-  const handleContentChange = (e) => setContent(e.target.value);
-  const handleImageChange = (e) => setImage(e.target.files[0]);
+  const handleTitleChange = (e:any) => setTitle(e.target.value);
+  const handleContentChange = (e:any) => setContent(e.target.value);
+  const handleImageChange = (e:any) => setImage(e.target.files[0]);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e:any) => {
     e.preventDefault();
     setLoading(true);
     const formData = new FormData();
@@ -70,7 +70,7 @@ const AddBlog = () => {
             value={content}
             onChange={handleContentChange}
             className="mt-2 p-3 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            rows="6"
+            rows={6}
             required
           ></textarea>
         </div>

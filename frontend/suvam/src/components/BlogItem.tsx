@@ -1,6 +1,5 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import trial from "../assets/trial.jpg";
 interface BlogItemProps {
   blog: { _id: string; title: string; content : string , image : string};
 }

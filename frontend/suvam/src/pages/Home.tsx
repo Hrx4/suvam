@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { fetchBlogs } from "../utils/api";
 import BlogItem from "../components/BlogItem";
-import Navbar from "../components/Navbar";
 
 const Home: React.FC = () => {
   const [blogs, setBlogs] = useState<any[]>([
