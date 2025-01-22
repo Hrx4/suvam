@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, useNavigate } from "react-router-dom";
+import {  useNavigate } from "react-router-dom";
 interface BlogItemProps {
   blog: { _id: string; title: string; content: string; image: string };
 }
