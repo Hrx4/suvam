@@ -32,7 +32,7 @@ const SideBar = ({
     if (token) {
       const res = await fetch(`${backendURL}api/logout`, {
         method: "POST",
-        credentials: "include",
+
         body: JSON.stringify({ JwtToken: token }),
         headers: {
           "Content-Type": "application/json",
@@ -65,7 +65,6 @@ const SideBar = ({
     // const userToken = getCookie("admin_token");
     const userToken = localStorage.getItem("suvam_token");
     setToken(userToken);
-    console.log("User Token:", userToken);
   }, [sideBarOpen]);
 
   useEffect(() => {

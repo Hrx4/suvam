@@ -19,7 +19,6 @@ const BlogItem: React.FC<BlogItemProps> = ({ blog }) => {
 
   const handleDelete = async () => {
     await fetch(`${backendURL}api/blogs/${blog._id}`, {
-      credentials: "include",
       body: JSON.stringify({ JwtToken: token }),
       headers: {
         "Content-Type": "application/json",
@@ -44,7 +43,6 @@ const BlogItem: React.FC<BlogItemProps> = ({ blog }) => {
     // Example: Access a cookie named "userToken"
     const userToken = localStorage.getItem("suvam_token");
     setToken(userToken);
-    console.log("User Token:", userToken);
   }, []);
 
   return (

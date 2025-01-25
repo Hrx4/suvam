@@ -26,23 +26,15 @@ const connection = async () => {
 };
 connection();
 const corsOptions = {
-  origin: ["http://localhost:5000/" , "https://suvam-svwu.vercel.app/"], // Allow frontend to access the backend
+  origin: ["http://localhost:5173" , "https://suvam-svwu.vercel.app"], 
+
 };
 
 // Use CORS middleware
 app.use(cors(corsOptions));
 app.use(express.json());
 // Configure Multer with disk storage
-const upload = multer({
-  storage: multer.diskStorage({
-    destination: (req, file, cb) => {
-      cb(null, "./uploads"); // Save to 'uploads' directory
-    },
-    filename: (req, file, cb) => {
-      cb(null, `${Date.now()}-${file.originalname}`); // Use unique file names
-    },
-  }),
-});
+const upload = multer({ storage: multer.memoryStorage()});
 
 app.listen(PORT, () => {
   console.log(`Server running at http://localhost:${PORT}`);
@@ -52,24 +44,27 @@ app.post("/api/createData", upload.single("image"), async (req, res) => {
 
   try {
     const token = jwt.verify(JwtToken, "secret");
-    console.log(token);
     if (!token) {
       return res.status(401).json({ message: "Invalid token" });
-    }
-  
+    }  
   
     if (!req.file) {
       await blogModel.create({ title, content , blogType });
   
       return res.status(200).send({ message: "No file uploaded." });
     }
-    const filePath = req.file.path; // Path to the uploaded file
-console.log(filePath);
-    // Upload file to Cloudinary
-    const uploadResponse = await cloudinary.uploader.upload(filePath, {
-      resource_type: "auto", // Automatically detect file type
-    });
-
+    const uploadResponse = await new Promise((resolve, reject) => {
+      cloudinary.uploader.upload_stream(
+        { resource_type: "auto" },
+        (error, result) => {
+          if (error) {
+            reject(error);
+          }
+          return resolve(result);
+        }
+      ).end(req.file.buffer);
+    })
+    
     await blogModel.create({
       title,
       content,
@@ -78,13 +73,13 @@ console.log(filePath);
     });
 
     // Delete file from server after uploading to Cloudinary
-    fs.unlink(filePath, (err) => {
-      if (err) {
-        console.error("Error deleting file:", err);
-      } else {
-        console.log("File deleted from server memory.");
-      }
-    });
+    // fs.unlink(filePath, (err) => {
+    //   if (err) {
+    //     console.error("Error deleting file:", err);
+    //   } else {
+    //     console.log("File deleted from server memory.");
+    //   }
+    // });
 
     // Send response
     res.status(200).send({
@@ -147,16 +142,20 @@ app.put("/api/blogs/:id", upload.single("image"), async (req, res) => {
     try {
       const { title, content , blogType } = req.body;
       const token = jwt.verify(JwtToken, "secret");
-      console.log(token);
       if (!token) {
         return res.status(401).json({ message: "Invalid token" });
       }
-      const filePath = req.file.path; // Path to the uploaded file
-console.log(filePath);
-      // Upload file to Cloudinary
-      const uploadResponse = await cloudinary.uploader.upload(filePath, {
-        resource_type: "auto", // Automatically detect file type
-      });
+      const uploadResponse = await new Promise((resolve, reject) => {
+        cloudinary.uploader.upload_stream(
+          { resource_type: "auto" },
+          (error, result) => {
+            if (error) {
+              reject(error);
+            }
+            return resolve(result);
+          }
+        ).end(req.file.buffer);
+      })
 
       const blog = await blogModel.findByIdAndUpdate(req.params.id, {
         title,
@@ -165,14 +164,14 @@ console.log(filePath);
         image: uploadResponse.secure_url,
       });
 
-      fs.unlink(filePath, (err) => {
+      // fs.unlink(filePath, (err) => {
         
-        if (err) {
-          console.error("Error deleting file:", err);
-        } else {
-          console.log("File deleted from server memory.");
-        }
-      });
+      //   if (err) {
+      //     console.error("Error deleting file:", err);
+      //   } else {
+      //     console.log("File deleted from server memory.");
+      //   }
+      // });
 
       res.status(200).json(blog);
     } catch (error) {
@@ -184,8 +183,6 @@ console.log(filePath);
 
 app.delete("/api/blogs/:id", async (req, res) => {
   const {JwtToken} = req.body;
-  console.log(JwtToken);
-
   try {
     if (!jwt.verify(JwtToken, "secret")) {
       return res.status(401).json({ message: "Invalid token" });
@@ -201,7 +198,6 @@ app.delete("/api/blogs/:id", async (req, res) => {
 
 app.post("/api/login", async (req, res) => {
   const { username, password } = req.body;
-  console.log(username, password);
 
   if (username === "admin" && password === "Suvam@4256") {
     const token = jwt.sign({ token: "suvamhere@4256" }, "secret");
@@ -220,7 +216,6 @@ app.post("/api/logout", async (req, res) => {
   try {
     const {JwtToken} = req.body;
   const token = jwt.verify(JwtToken, "secret");
-  console.log(token);
   if (
     JwtToken &&
     token

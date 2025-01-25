@@ -33,13 +33,11 @@ const AddBlog = () => {
     if (image) {
       formData.append("image", image);
     }
-    console.log(formData.get("content"));
 
     try {
-      const response = await fetch("${backendURL}api/createData", {
+      const response = await fetch(`${backendURL}api/createData`, {
         method: "POST",
         body: formData,
-        credentials: "include",
       });
 
       if (response.ok) {
@@ -70,13 +68,11 @@ const AddBlog = () => {
     } else if (image) {
       formData.append("image", image);
     }
-    console.log(formData.get("content"));
 
     try {
       const response = await fetch(`${backendURL}api/blogs/${blogState._id}`, {
         method: "PUT",
         body: formData,
-        credentials: "include",
       });
 
       if (response.ok) {

@@ -31,7 +31,7 @@ const Login = ({ setloginPage }: any) => {
     try {
       const response = await fetch(`${backendURL}api/login`, {
         method: "POST",
-        credentials: "include",
+
         headers: {
           "Content-Type": "application/json",
         },
@@ -43,7 +43,6 @@ const Login = ({ setloginPage }: any) => {
       }
 
       const data = await response.json();
-      console.log("Login successful", data);
       localStorage.setItem("suvam_token", data.token);
       navigate("/fictional");
       setloginPage(false);
