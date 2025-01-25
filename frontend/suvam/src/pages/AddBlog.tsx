@@ -6,6 +6,7 @@ const AddBlog = () => {
   const { blog: blogState } = location.state || {};
   const { edit } = location.state || false;
   const [title, setTitle] = useState(blogState?.title || "");
+  const [blogType, setBlogType] = useState(blogState?.blogType || "fictional");
   const [content, setContent] = useState(blogState?.content || "");
   const [image, setImage] = useState(blogState?.image || null);
 
@@ -16,6 +17,7 @@ const AddBlog = () => {
 
   const handleTitleChange = (e: any) => setTitle(e.target.value);
   const handleContentChange = (e: any) => setContent(e.target.value);
+  const handleBlogTypeChange = (e: any) => setBlogType(e.target.value);
   const handleImageChange = (e: any) => setImage(e.target.files[0]);
 
   const handleCreate = async (e: any) => {
@@ -24,6 +26,7 @@ const AddBlog = () => {
     const formData = new FormData();
     formData.append("title", title);
     formData.append("content", content);
+    formData.append("blogType", blogType);
     if (image) {
       formData.append("image", image);
     }
@@ -35,6 +38,7 @@ const AddBlog = () => {
         {
           method: "POST",
           body: formData,
+          credentials: "include",
         }
       );
 
@@ -42,6 +46,7 @@ const AddBlog = () => {
         alert("Data created successfully!");
         setTitle("");
         setContent("");
+        setBlogType("fictional");
         setImage(null);
         if (ref.current) ref.current.value = "";
       }
@@ -57,6 +62,7 @@ const AddBlog = () => {
     const formData = new FormData();
     formData.append("title", title);
     formData.append("content", content);
+    formData.append("blogType", blogType);
     if (typeof image === "string") {
       formData.append("existimage", image);
     } else if (image) {
@@ -70,6 +76,7 @@ const AddBlog = () => {
         {
           method: "PUT",
           body: formData,
+          credentials: "include",
         }
       );
 
@@ -77,9 +84,10 @@ const AddBlog = () => {
         alert("Data created successfully!");
         setTitle("");
         setContent("");
+        setBlogType("fictional");
         setImage(null);
         if (ref.current) ref.current.value = "";
-        navigate("/");
+        navigate("/fictional");
       }
     } catch (error) {
       console.error("Error creating data:", error);
@@ -93,6 +101,18 @@ const AddBlog = () => {
         {edit ? "Edit Entry" : "Create New Entry"}
       </h2>
       <form onSubmit={edit ? handleEdit : handleCreate}>
+        {/* Title Field */}
+        <div className="mb-4">
+          <select
+            required
+            className="mt-2 p-3 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            value={blogType}
+            onChange={handleBlogTypeChange}
+          >
+            <option value="fictional">Fictional</option>
+            <option value="non-fictional">Non-fictional</option>
+          </select>
+        </div>
         {/* Title Field */}
         <div className="mb-4">
           <label className="block text-sm font-medium text-gray-700">

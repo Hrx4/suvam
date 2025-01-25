@@ -8,11 +8,28 @@ const Home: React.FC = () => {
   useEffect(() => {
     const getBlogs = async () => {
       setLoading(true);
-      const { data } = await fetchBlogs();
+      const blogType = location.pathname.split("/")[1];
+      console.log(blogType);
+      
+      const { data } =  await fetchBlogs(blogType);
       setBlogs(data);
       setLoading(false);
     };
     getBlogs();
+  }, [location.pathname]);
+
+  useEffect(() => {
+    // Function to get a specific cookie value by name
+    const getCookie = (name: string): string | null => {
+      const cookies = document.cookie
+        .split("; ")
+        .find((row) => row.startsWith(`${name}=`));
+      return cookies ? cookies.split("=")[1] : null;
+    };
+
+    // Example: Access a cookie named "userToken"
+    const userToken = getCookie("admin_token");
+    console.log("User Token:", userToken);
   }, []);
 
   if (loading) return <p>Loading...</p>;
@@ -21,7 +38,9 @@ const Home: React.FC = () => {
   return (
     <>
       <div className=" w-full flex-1 pb-4 mt-2 overflow-y-auto ">
-
+        {
+          blogs.length===0 ? <p className=" text-2xl font-bold text-center">No blogs Here ;)</p> : null
+        }
         {blogs && blogs.slice().reverse().map((blog) => (
           <BlogItem key={blog._id} blog={blog} />
         ))}

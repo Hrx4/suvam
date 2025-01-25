@@ -10,6 +10,10 @@
          type: String,
          required: true,
      },
+     blogType: {
+         type: String,
+         enum: ['fictional', 'non-fictional'],
+     },
     
      image: {
          type: String,
