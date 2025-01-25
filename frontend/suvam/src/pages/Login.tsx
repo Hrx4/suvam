@@ -43,7 +43,7 @@ const Login = ({ setloginPage }: any) => {
 
       const data = await response.json();
       console.log("Login successful", data);
-      navigate("/");
+      navigate("/fictional");
       setloginPage(false);
       // Redirect or handle success
     } catch (err) {
