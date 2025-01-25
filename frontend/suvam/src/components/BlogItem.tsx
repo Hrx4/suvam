@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { backendURL } from "../backend";
 interface BlogItemProps {
   blog: { _id: string; title: string; content: string; image: string };
 }
@@ -17,7 +18,7 @@ const BlogItem: React.FC<BlogItemProps> = ({ blog }) => {
   };
 
   const handleDelete = async () => {
-    await fetch(`https://suvam-svwu.vercel.app/api/blogs/${blog._id}`, {
+    await fetch(`${backendURL}api/blogs/${blog._id}`, {
       credentials: "include",
       body: JSON.stringify({ JwtToken: token }),
       headers: {

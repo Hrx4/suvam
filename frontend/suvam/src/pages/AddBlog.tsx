@@ -1,5 +1,6 @@
 import { useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { backendURL } from "../backend";
 
 const AddBlog = () => {
   const location = useLocation();
@@ -35,14 +36,11 @@ const AddBlog = () => {
     console.log(formData.get("content"));
 
     try {
-      const response = await fetch(
-        "https://suvam-svwu.vercel.app/api/createData",
-        {
-          method: "POST",
-          body: formData,
-          credentials: "include",
-        }
-      );
+      const response = await fetch("${backendURL}api/createData", {
+        method: "POST",
+        body: formData,
+        credentials: "include",
+      });
 
       if (response.ok) {
         alert("Data created successfully!");
@@ -75,14 +73,11 @@ const AddBlog = () => {
     console.log(formData.get("content"));
 
     try {
-      const response = await fetch(
-        `https://suvam-svwu.vercel.app/api/blogs/${blogState._id}`,
-        {
-          method: "PUT",
-          body: formData,
-          credentials: "include",
-        }
-      );
+      const response = await fetch(`${backendURL}api/blogs/${blogState._id}`, {
+        method: "PUT",
+        body: formData,
+        credentials: "include",
+      });
 
       if (response.ok) {
         alert("Data created successfully!");

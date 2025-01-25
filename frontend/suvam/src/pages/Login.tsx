@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { backendURL } from "../backend";
 
 interface LoginFormData {
   username: string;
@@ -28,7 +29,7 @@ const Login = ({ setloginPage }: any) => {
     setLoading(true);
 
     try {
-      const response = await fetch("https://suvam-svwu.vercel.app/api/login", {
+      const response = await fetch(`${backendURL}api/login`, {
         method: "POST",
         credentials: "include",
         headers: {

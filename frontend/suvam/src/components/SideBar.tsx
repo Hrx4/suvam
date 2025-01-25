@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { backendURL } from "../backend";
 
 const SideBar = ({
   sideBarOpen,
@@ -29,7 +30,7 @@ const SideBar = ({
     setDelayedAnimation(!delayedAnimation);
     setloginPage(true);
     if (token) {
-      const res = await fetch("https://suvam-svwu.vercel.app/api/logout", {
+      const res = await fetch(`${backendURL}api/logout`, {
         method: "POST",
         credentials: "include",
         body: JSON.stringify({ JwtToken: token }),

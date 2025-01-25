@@ -18,7 +18,7 @@ cloudinary.config({
   api_secret: "4Q1MqO9iASwovPvi4uIB6-but8Y", // Replace with your API Secret
 });
 
-// http://localhost:5000/ , https://suvam-svwu.vercel.app/
+// "http://localhost:5000/" , "https://suvam-svwu.vercel.app/"
 
 // Connect to MongoDB
 const connection = async () => {
@@ -26,7 +26,7 @@ const connection = async () => {
 };
 connection();
 const corsOptions = {
-  origin: "*", // Allow frontend to access the backend
+  origin: ["http://localhost:5000/" , "https://suvam-svwu.vercel.app/"], // Allow frontend to access the backend
 };
 
 // Use CORS middleware
