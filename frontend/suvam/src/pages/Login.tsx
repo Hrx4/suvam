@@ -6,7 +6,7 @@ interface LoginFormData {
   password: string;
 }
 
-const Login = ({ loginPage, setloginPage }: any) => {
+const Login = ({ setloginPage }: any) => {
   const [formData, setFormData] = useState<LoginFormData>({
     username: "",
     password: "",
