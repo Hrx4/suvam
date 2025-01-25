@@ -204,7 +204,7 @@ app.post("/api/login", async (req, res) => {
     const token = jwt.sign({ token: "suvamhere@4256" }, "secret");
     res.cookie("admin_token", token , {
       // httpOnly: true,
-      secure: true,
+      // secure: true,
       sameSite: "None",
       maxAge: 60 * 60 * 24 * 30,
     });
