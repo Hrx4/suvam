@@ -205,7 +205,7 @@ app.post("/api/login", async (req, res) => {
     res.cookie("admin_token", token , {
       // httpOnly: true,
       secure: true,
-      sameSite: "strict",
+      sameSite: "None",
       maxAge: 60 * 60 * 24 * 30,
     });
     return res.json({ message: "Cookie has been set" });
