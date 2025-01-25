@@ -19,6 +19,7 @@ const BlogItem: React.FC<BlogItemProps> = ({ blog }) => {
   const handleDelete = async () => {
     await fetch(`https://suvam-svwu.vercel.app/api/blogs/${blog._id}`, {
       credentials: "include",
+      body: JSON.stringify({ JwtToken: token }),
       headers: {
         "Content-Type": "application/json",
       },
@@ -32,15 +33,15 @@ const BlogItem: React.FC<BlogItemProps> = ({ blog }) => {
 
   useEffect(() => {
     // Function to get a specific cookie value by name
-    const getCookie = (name: string): string | null => {
-      const cookies = document.cookie
-        .split("; ")
-        .find((row) => row.startsWith(`${name}=`));
-      return cookies ? cookies.split("=")[1] : null;
-    };
+    // const getCookie = (name: string): string | null => {
+    //   const cookies = document.cookie
+    //     .split("; ")
+    //     .find((row) => row.startsWith(`${name}=`));
+    //   return cookies ? cookies.split("=")[1] : null;
+    // };
 
     // Example: Access a cookie named "userToken"
-    const userToken = getCookie("admin_token");
+    const userToken = localStorage.getItem("suvam_token");
     setToken(userToken);
     console.log("User Token:", userToken);
   }, []);

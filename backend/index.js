@@ -8,7 +8,6 @@ const app = express();
 const PORT = 5000;
 const mongoose = require("mongoose");
 const blogModel = require("./models/blogModel");
-var cookieParser = require("cookie-parser");
 const jwt = require("jsonwebtoken");
 const MONGODB_URI =
   "mongodb+srv://dragkamal71:nJpsGN4A1pHn9OFF@cluster0.zub33.mongodb.net/";
@@ -36,7 +35,6 @@ const corsOptions = {
 // Use CORS middleware
 app.use(cors(corsOptions));
 app.use(express.json());
-app.use(cookieParser());
 // Configure Multer with disk storage
 const upload = multer({
   storage: multer.diskStorage({
@@ -53,24 +51,23 @@ app.listen(PORT, () => {
   console.log(`Server running at http://localhost:${PORT}`);
 });
 app.post("/api/createData", upload.single("image"), async (req, res) => {
-
-  const token = jwt.verify(req.cookies.admin_token, "secret");
-  console.log(token);
-  if (!token) {
-    return res.status(401).json({ message: "Invalid token" });
-  }
-
-  const { title, content , blogType } = req.body;
-
-  if (!req.file) {
-    await blogModel.create({ title, content , blogType });
-
-    return res.status(200).send({ message: "No file uploaded." });
-  }
+  const { title, content , blogType , JwtToken } = req.body;
 
   try {
+    const token = jwt.verify(JwtToken, "secret");
+    console.log(token);
+    if (!token) {
+      return res.status(401).json({ message: "Invalid token" });
+    }
+  
+  
+    if (!req.file) {
+      await blogModel.create({ title, content , blogType });
+  
+      return res.status(200).send({ message: "No file uploaded." });
+    }
     const filePath = req.file.path; // Path to the uploaded file
-
+console.log(filePath);
     // Upload file to Cloudinary
     const uploadResponse = await cloudinary.uploader.upload(filePath, {
       resource_type: "auto", // Automatically detect file type
@@ -127,13 +124,15 @@ app.get("/api/blogs/:id", async (req, res) => {
 });
 
 app.put("/api/blogs/:id", upload.single("image"), async (req, res) => {
-  const token = jwt.verify(req.cookies.admin_token, "secret");
+  const {JwtToken} = req.body;
+  
+  if (!req.file) {
+    try {
+      const token = jwt.verify(JwtToken, "secret");
   console.log(token);
   if (!token) {
     return res.status(401).json({ message: "Invalid token" });
   }
-  if (!req.file) {
-    try {
       const { title, content, existimage, blogType } = req.body;
 
       const blog = await blogModel.findByIdAndUpdate(req.params.id, {
@@ -150,9 +149,13 @@ app.put("/api/blogs/:id", upload.single("image"), async (req, res) => {
   } else {
     try {
       const { title, content , blogType } = req.body;
-
+      const token = jwt.verify(JwtToken, "secret");
+      console.log(token);
+      if (!token) {
+        return res.status(401).json({ message: "Invalid token" });
+      }
       const filePath = req.file.path; // Path to the uploaded file
-
+console.log(filePath);
       // Upload file to Cloudinary
       const uploadResponse = await cloudinary.uploader.upload(filePath, {
         resource_type: "auto", // Automatically detect file type
@@ -166,6 +169,7 @@ app.put("/api/blogs/:id", upload.single("image"), async (req, res) => {
       });
 
       fs.unlink(filePath, (err) => {
+        
         if (err) {
           console.error("Error deleting file:", err);
         } else {
@@ -182,9 +186,11 @@ app.put("/api/blogs/:id", upload.single("image"), async (req, res) => {
 });
 
 app.delete("/api/blogs/:id", async (req, res) => {
-  console.log(req.cookies.admin_token);
+  const {JwtToken} = req.body;
+  console.log(JwtToken);
+
   try {
-    if (!jwt.verify(req.cookies.admin_token, "secret")) {
+    if (!jwt.verify(JwtToken, "secret")) {
       return res.status(401).json({ message: "Invalid token" });
     }
 
@@ -202,29 +208,32 @@ app.post("/api/login", async (req, res) => {
 
   if (username === "admin" && password === "Suvam@4256") {
     const token = jwt.sign({ token: "suvamhere@4256" }, "secret");
-    res.cookie("admin_token", token , {
-      httpOnly: false,
-      secure: false,
-      sameSite: "Lax",
-      maxAge: 60 * 60 * 24 * 30,
-    });
-    return res.json({ message: "Cookie has been set" });
+    // res.cookie("admin_token", token , {
+    //   httpOnly: false,
+    //   secure: false,
+    //   sameSite: "Lax",
+    //   maxAge: 60 * 60 * 24 * 30,
+    // });
+    return res.json({ message: "Cookie has been set" , token});
   }
   res.status(401).json({ message: "Invalid username or password" });
 });
 
 app.post("/api/logout", async (req, res) => {
-  const token = jwt.verify(req.cookies.admin_token, "secret");
+  try {
+    const {JwtToken} = req.body;
+  const token = jwt.verify(JwtToken, "secret");
   console.log(token);
   if (
-    req.cookies.admin_token &&
+    JwtToken &&
     token
   ) {
-    return res
-      .clearCookie("admin_token")
-      .json({ message: "Logged out successfully" });
+    return res.json({ message: "Logged out successfully" });
   }
-  res.status(401).json({ message: "Invalid token" });
+  } catch (error) {
+    res.status(401).json({ message: "Invalid token" });
+  }
+  
 }); 
 
 // Ensure the 'uploads' directory exists

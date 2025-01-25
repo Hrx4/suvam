@@ -23,10 +23,12 @@ const AddBlog = () => {
   const handleCreate = async (e: any) => {
     e.preventDefault();
     setLoading(true);
+    const suvamToken = localStorage.getItem("suvam_token") || "";
     const formData = new FormData();
     formData.append("title", title);
     formData.append("content", content);
     formData.append("blogType", blogType);
+    formData.append("JwtToken", suvamToken);
     if (image) {
       formData.append("image", image);
     }
@@ -58,11 +60,13 @@ const AddBlog = () => {
 
   const handleEdit = async (e: any) => {
     e.preventDefault();
+    const suvamToken = localStorage.getItem("suvam_token") || "";
     setLoading(true);
     const formData = new FormData();
     formData.append("title", title);
     formData.append("content", content);
     formData.append("blogType", blogType);
+    formData.append("JwtToken", suvamToken);
     if (typeof image === "string") {
       formData.append("existimage", image);
     } else if (image) {

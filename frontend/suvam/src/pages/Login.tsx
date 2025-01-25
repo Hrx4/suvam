@@ -43,6 +43,7 @@ const Login = ({ setloginPage }: any) => {
 
       const data = await response.json();
       console.log("Login successful", data);
+      localStorage.setItem("suvam_token", data.token);
       navigate("/fictional");
       setloginPage(false);
       // Redirect or handle success

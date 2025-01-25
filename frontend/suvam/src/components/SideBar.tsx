@@ -32,12 +32,14 @@ const SideBar = ({
       const res = await fetch("https://suvam-svwu.vercel.app/api/logout", {
         method: "POST",
         credentials: "include",
+        body: JSON.stringify({ JwtToken: token }),
         headers: {
           "Content-Type": "application/json",
         },
       });
       if (res.status === 200) {
         console.log("Logout successful");
+        localStorage.removeItem("suvam_token");
         window.location.reload();
       }
     } else {
@@ -52,14 +54,15 @@ const SideBar = ({
 
   useEffect(() => {
     // Function to get a specific cookie value by name
-    const getCookie = (name: string): string | null => {
-      const cookies = document.cookie
-        .split("; ")
-        .find((row) => row.startsWith(`${name}=`));
-      return cookies ? cookies.split("=")[1] : null;
-    };
-    // Example: Access a cookie named "userToken"
-    const userToken = getCookie("admin_token");
+    // const getCookie = (name: string): string | null => {
+    //   const cookies = document.cookie
+    //     .split("; ")
+    //     .find((row) => row.startsWith(`${name}=`));
+    //   return cookies ? cookies.split("=")[1] : null;
+    // };
+    // // Example: Access a cookie named "userToken"
+    // const userToken = getCookie("admin_token");
+    const userToken = localStorage.getItem("suvam_token");
     setToken(userToken);
     console.log("User Token:", userToken);
   }, [sideBarOpen]);
@@ -107,7 +110,10 @@ const SideBar = ({
           {token ? (
             <li
               className=" border-b-2 p-2 cursor-pointer text-xl font-medium"
-              onClick={() => navigate("/addblog")}
+              onClick={() => {
+                navigate("/addblog");
+                handleClose();
+              }}
             >
               Add Blog
             </li>
