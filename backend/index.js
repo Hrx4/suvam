@@ -202,7 +202,12 @@ app.post("/api/login", async (req, res) => {
 
   if (username === "admin" && password === "Suvam@4256") {
     const token = jwt.sign({ token: "suvamhere@4256" }, "secret");
-    res.cookie("admin_token", token);
+    res.cookie("admin_token", token , {
+      // httpOnly: true,
+      secure: true,
+      sameSite: "strict",
+      maxAge: 60 * 60 * 24 * 30,
+    });
     return res.json({ message: "Cookie has been set" });
   }
   res.status(401).json({ message: "Invalid username or password" });
