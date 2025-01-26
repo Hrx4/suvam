@@ -97,6 +97,11 @@ app.post("/api/createData", upload.single("image"), async (req, res) => {
 });
 app.get("/api/blogs", async (req, res) => {
   try {
+    if(req.query.blogType===""){
+      const blogs = await blogModel.find();
+      return res.status(200).json(blogs);
+    }
+    
     const blogs = await blogModel.find({blogType: req.query.blogType});
     res.status(200).json(blogs);
   } catch (error) {

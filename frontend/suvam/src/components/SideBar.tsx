@@ -97,6 +97,12 @@ const SideBar = ({
         >
           <li
             className=" border-b-2 p-2 cursor-pointer text-xl font-medium"
+            onClick={() => handleBlogs("/")}
+          >
+            General
+          </li>
+          <li
+            className=" border-b-2 p-2 cursor-pointer text-xl font-medium"
             onClick={() => handleBlogs("/fictional")}
           >
             Fictional
@@ -119,7 +125,7 @@ const SideBar = ({
             </li>
           ) : null}
           <li
-            className=" border-b-2 p-2 cursor-pointer text-xl font-medium"
+            className={`${token ? "block" : "hidden"} border-b-2 p-2 cursor-pointer text-xl font-medium`}
             onClick={handleNavigate}
           >
             {token ? "Logout" : "Login"}

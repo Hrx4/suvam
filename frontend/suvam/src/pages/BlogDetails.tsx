@@ -28,7 +28,12 @@ const BlogDetails: React.FC = () => {
           className=" h-60 w-1/2 ml-auto mr-auto block  pt-5"
         />
         }
-        <p className=" text-left pt-5">{blog.content}</p>
+        <p className=" text-left px-3 py-5">{blog.content}
+
+        <div className="border-0 border-t border-dotted border-black  mt-4 "></div>
+
+        </p>
+
       </div>
     </div>
   );

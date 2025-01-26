@@ -22,6 +22,7 @@ const App: React.FC = () => {
       <SideBar sideBarOpen={sideBarOpen} setSideBarOpen={setSideBarOpen} loginPage={loginPage} setloginPage={setloginPage} />
 
         <Routes>
+        <Route path="/" element={<Home />} />
           <Route path="/fictional" element={<Home />} />
           <Route path="/non-fictional" element={<Home />} />
           <Route path="/addblog" element={<AddBlog />}  />

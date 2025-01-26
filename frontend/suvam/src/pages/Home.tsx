@@ -8,7 +8,7 @@ const Home: React.FC = () => {
   useEffect(() => {
     const getBlogs = async () => {
       setLoading(true);
-      const blogType = location.pathname.split("/")[1];      
+      const blogType = location.pathname.split("/")[1]    
       const { data } =  await fetchBlogs(blogType);
       setBlogs(data);
       setLoading(false);
