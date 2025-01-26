@@ -85,13 +85,13 @@ const SideBar = ({
       <div
         className={` h-dvh ${
           sideBarOpen ? "w-60" : "w-0"
-        } bg-red-300 transition-all duration-500 `}
+        }  bg-black transition-all duration-500 `}
       >
         <div className=" p-3 " onClick={handleClose}>
           {sideBarOpen ? <CloseIcon /> : <HamIcon />}
         </div>
         <ul
-          className={`flex flex-col gap-4 p-4 ${
+          className={`font-kanit flex flex-col gap-4 p-4 text-white ${
             !sideBarOpen ? " hidden" : " block"
           }`}
         >
@@ -143,7 +143,7 @@ const CloseIcon = () => (
     viewBox="0 0 24 24"
     strokeWidth={1.5}
     stroke="currentColor"
-    className="size-7 ml-auto cursor-pointer mt-5"
+    className="size-7 ml-auto cursor-pointer mt-5 text-white"
   >
     <path
       strokeLinecap="round"

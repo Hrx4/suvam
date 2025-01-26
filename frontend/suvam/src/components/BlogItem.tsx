@@ -56,9 +56,9 @@ const BlogItem: React.FC<BlogItemProps> = ({ blog }) => {
         </button>
       </div>
       <div className=" cursor-pointer" onClick={handleGoBlog}>
-        <span className=" text-xl font-extrabold">{blog.title}</span>
+        <span className=" font-bona text-3xl font-extrabold">{blog.title}</span>
         <div className=" flex gap-2 ">
-          <p className="  line-clamp-4">{blog.content}</p>
+          <p className="  line-clamp-4 font-lora  text-base">{blog.content}</p>
           {blog.image && (
             <img src={blog.image} alt="trial" className=" h-24 w-24 ml-auto" />
           )}
